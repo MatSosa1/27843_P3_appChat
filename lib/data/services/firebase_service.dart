@@ -11,16 +11,18 @@ class FirebaseService {
 
   Stream<List<MessageModel>> receiveMessages() {
     return ref.onValue.map((event) {
-      final data = event.snapshot.value as Map<String, dynamic>?;
+      final raw = event.snapshot.value;
 
-      if (data == null) return [];
+      if (raw == null) return [];
 
-      final messages = data.values
-        .map((e) => MessageModel.fromJson(e))
-        .toList()
+      final data = Map<String, dynamic>.from(raw as Map);
+
+      return data.values
+          .map((e) => MessageModel.fromJson(
+                Map<String, dynamic>.from(e as Map),
+              ))
+          .toList()
         ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-
-      return messages;
     });
   }
 }
