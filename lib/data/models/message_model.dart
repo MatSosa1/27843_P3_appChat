@@ -13,9 +13,9 @@ class MessageModel {
 
   factory MessageModel.fromJson(Map<String, dynamic> map) {
     return MessageModel(
-      text: map['text'],
-      author: map['author'],
-      timestamp: map['timestamp'],
+      text: map['text'] as String,
+      author: map['author'] as String,
+      timestamp: map['timestamp'] as int,
     );
   }
 

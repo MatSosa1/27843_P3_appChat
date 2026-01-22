@@ -8,5 +8,20 @@ class FirebaseService {
     ref.push()
       .set(message.toJson());
   }
+
+  Stream<List<MessageModel>> receiveMessages() {
+    return ref.onValue.map((event) {
+      final data = event.snapshot.value as Map<String, dynamic>?;
+
+      if (data == null) return [];
+
+      final messages = data.values
+        .map((e) => MessageModel.fromJson(e))
+        .toList()
+        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+      return messages;
+    });
+  }
 }
 
