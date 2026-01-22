@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'data/services/notification_service.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
+import 'presentation/providers/chat_provider.dart';
 import 'presentation/providers/user_provider.dart';
 import 'presentation/views/chat_view.dart';
 import 'presentation/views/username_view.dart';
@@ -13,6 +15,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await NotificationService.init();
+  await NotificationService.requestPermission();
 
   runApp(
     const ProviderScope(
@@ -45,6 +50,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+    ref.watch(chatNotificationProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
