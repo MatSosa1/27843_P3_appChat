@@ -1,21 +1,21 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
-  static final _plugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin plugin;
 
-  static Future<void> init() async {
-    const androidInit = AndroidInitializationSettings(
-      'ic_notification',
-    );
+  NotificationService(this.plugin);
+
+  Future<void> init() async {
+    const androidInit = AndroidInitializationSettings('ic_notification');
 
     const settings = InitializationSettings(
       android: androidInit,
     );
 
-    await _plugin.initialize(settings);
+    await plugin.initialize(settings);
   }
 
-  static Future<void> show({
+  Future<void> show({
     required String title,
     required String body,
   }) async {
@@ -32,13 +32,13 @@ class NotificationService {
       android: androidDetails,
     );
 
-    await _plugin.show(0, title, body, details);
+    await plugin.show(0, title, body, details);
   }
 
-  static Future<void> requestPermission() async {
+  Future<void> requestPermission() async {
     final androidPlugin =
-      _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+        plugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
 
     await androidPlugin?.requestNotificationsPermission();
   }

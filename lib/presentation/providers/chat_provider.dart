@@ -1,14 +1,18 @@
 import 'package:app_chat/data/models/message_model.dart';
 import 'package:app_chat/data/services/firebase_service.dart';
 import 'package:app_chat/data/services/notification_service.dart';
-import 'package:app_chat/domain/models/message.dart';
+import 'package:app_chat/domain/models/message.dart' as domain;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'user_provider.dart';
 
 final firebaseServiceProvider = Provider<FirebaseService>((ref) => FirebaseService());
 
-final messageProvider = StreamProvider<List<Message>>((ref) {
+final notificationService =
+    NotificationService(FlutterLocalNotificationsPlugin());
+
+final messageProvider = StreamProvider<List<domain.Message>>((ref) {
   final service = ref.read(firebaseServiceProvider);
 
   return service.ref.onValue.map((event) {
@@ -43,7 +47,7 @@ final chatNotificationProvider = Provider<void>((ref) {
     if (user != null && lastCurrent.author == user.name) return;
 
     if (lastCurrent.timestamp > lastPrevTs) {
-      NotificationService.show(
+      notificationService.show(
         title: lastCurrent.author,
         body: lastCurrent.text,
       );

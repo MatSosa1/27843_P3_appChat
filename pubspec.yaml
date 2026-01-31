@@ -46,6 +46,8 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.0  # Para simular clases (mocking)
   shared_preferences_platform_interface: ^2.0.0 # Para mockear SharedPreferences
+  integration_test:
+    sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
